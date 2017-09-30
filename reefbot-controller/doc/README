@@ -1,0 +1,5 @@
+vr_C_sample is a collection of code from VideoRay that I used to develop the robot_api.py file.  
+
+Look at vr_C_sample/rov_sample.c on how to use the device.
+Look at vr_C_sample/inc/protocol_pro4.h for the communication protocol.
+Look at vr_C_sample/inc/pro4_specific_response.h to get a feel for response packets.

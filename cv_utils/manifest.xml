@@ -1,0 +1,20 @@
+<package>
+  <description brief="cv_utils">
+
+     A bunch of miscellaneous computer vision routines that come up
+     again and again.
+
+  </description>
+  <author>Mark Desnoyer</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/cv_utils</url>
+  <depend package="roscpp"/>
+  <depend package="sensor_msgs"/>
+  <export>
+    <cpp cflags="-I${prefix}/include" lflags="-L${prefix}/lib -Wl,-rpath,-L${prefix}/lib -lros"/>
+  </export>
+
+</package>
+
+

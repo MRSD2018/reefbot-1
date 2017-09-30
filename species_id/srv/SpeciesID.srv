@@ -1,0 +1,5 @@
+# Specifies a service that can id species
+
+reefbot_msgs/SpeciesIDRequest request
+---
+reefbot_msgs/SpeciesIDResponse response

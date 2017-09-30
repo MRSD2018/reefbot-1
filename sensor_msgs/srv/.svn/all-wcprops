@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/ros-pkg/!svn/ver/26659/stacks/common_msgs/trunk/sensor_msgs/srv
+END
+SetCameraInfo.srv
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/ros-pkg/!svn/ver/25426/stacks/common_msgs/trunk/sensor_msgs/srv/SetCameraInfo.srv
+END

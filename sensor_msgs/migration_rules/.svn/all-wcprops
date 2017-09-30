@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/migration_rules
+END
+sensor_msgs.bmr
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/migration_rules/sensor_msgs.bmr
+END

@@ -1,0 +1,17 @@
+K 10
+svn:ignore
+V 60
+.build_version
+.rosgcov_files
+bin
+build
+lib
+msg_gen
+srv_gen
+
+K 13
+svn:mergeinfo
+V 245
+/pkg/branches/gazebo-branch-merge/common/sensor_msgs:15683-15684,15739-15794,15797-15820,15822-15839,15852-15870,15983-16008,16010-16016,16129-16141,16145-16169,16245-16262,16274-16334
+/stacks/common_msgs/branches/rep0104/sensor_msgs:33669-33822
+END

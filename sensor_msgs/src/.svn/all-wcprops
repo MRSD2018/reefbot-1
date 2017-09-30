@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/ros-pkg/!svn/ver/37581/stacks/common_msgs/trunk/sensor_msgs/src
+END
+distortion_models.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/src/distortion_models.cpp
+END
+point_cloud_conversion.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/ros-pkg/!svn/ver/37475/stacks/common_msgs/trunk/sensor_msgs/src/point_cloud_conversion.cpp
+END
+image_encodings.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/ros-pkg/!svn/ver/37581/stacks/common_msgs/trunk/sensor_msgs/src/image_encodings.cpp
+END

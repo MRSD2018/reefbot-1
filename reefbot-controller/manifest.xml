@@ -1,0 +1,17 @@
+<package>
+  <description brief="reefbot-controller">
+
+     reefbot-controller: Control interface to the video ray hardware.
+
+  </description>
+  <author>Michael Furlong</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/reefbot-controller</url>
+  <depend package="rospy"/>
+  <depend package="reefbot_msgs"/>
+  <depend package="joy"/>
+
+</package>
+
+

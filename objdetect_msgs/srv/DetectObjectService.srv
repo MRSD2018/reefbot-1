@@ -1,0 +1,4 @@
+DetectObject request_msg
+---
+DetectionArray detections
+std_msgs/Duration processing_time

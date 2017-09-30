@@ -1,0 +1,15 @@
+objdetect_msgs/DetectObjectGrid request
+---
+# The grid defined for the response
+objdetect_msgs/Grid grid
+
+# The top hit, the confidence and id label
+sensor_msgs/MatND confidence
+sensor_msgs/MatND top_label
+
+# The confidence that it's not a fish
+sensor_msgs/MatND not_fish_confidence
+
+# The processing time of the request
+std_msgs/Duration processing_time
+

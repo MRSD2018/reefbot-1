@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/ros-pkg/!svn/ver/37417/stacks/common_msgs/trunk/sensor_msgs/msg
+END
+Imu.msg
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/ros-pkg/!svn/ver/24750/stacks/common_msgs/trunk/sensor_msgs/msg/Imu.msg
+END
+Range.msg
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/ros-pkg/!svn/ver/33234/stacks/common_msgs/trunk/sensor_msgs/msg/Range.msg
+END
+PointField.msg
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/msg/PointField.msg
+END
+NavSatStatus.msg
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/ros-pkg/!svn/ver/33420/stacks/common_msgs/trunk/sensor_msgs/msg/NavSatStatus.msg
+END
+Joy.msg
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/ros-pkg/!svn/ver/37277/stacks/common_msgs/trunk/sensor_msgs/msg/Joy.msg
+END
+PointCloud2.msg
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/msg/PointCloud2.msg
+END
+NavSatFix.msg
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/ros-pkg/!svn/ver/33534/stacks/common_msgs/trunk/sensor_msgs/msg/NavSatFix.msg
+END
+ChannelFloat32.msg
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/msg/ChannelFloat32.msg
+END
+CameraInfo.msg
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/msg/CameraInfo.msg
+END
+JoyFeedbackArray.msg
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/ros-pkg/!svn/ver/37417/stacks/common_msgs/trunk/sensor_msgs/msg/JoyFeedbackArray.msg
+END
+JoyFeedback.msg
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/ros-pkg/!svn/ver/37417/stacks/common_msgs/trunk/sensor_msgs/msg/JoyFeedback.msg
+END
+CompressedImage.msg
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/ros-pkg/!svn/ver/23884/stacks/common_msgs/trunk/sensor_msgs/msg/CompressedImage.msg
+END
+LaserScan.msg
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/msg/LaserScan.msg
+END
+PointCloud.msg
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/msg/PointCloud.msg
+END
+Image.msg
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/msg/Image.msg
+END
+JointState.msg
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/ros-pkg/!svn/ver/31811/stacks/common_msgs/trunk/sensor_msgs/msg/JointState.msg
+END
+RegionOfInterest.msg
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/ros-pkg/!svn/ver/33856/stacks/common_msgs/trunk/sensor_msgs/msg/RegionOfInterest.msg
+END

@@ -1,0 +1,23 @@
+<package>
+  <description brief="hima_experiment">
+
+     hima_experiment
+
+  </description>
+  <author>Mark Desnoyer</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/hima_experiment</url>
+  <depend package="rospy"/>
+  <depend package="roscpp"/>
+  <depend package="visual_utility"/>
+  <depend package="cascade_parts_detector"/>
+  <depend package="hog_detector"/>
+  <depend package="std_msgs"/>
+  <depend package="sensor_msgs"/>
+  <depend package="nodelet"/>
+  <depend package="rosbag"/>
+
+</package>
+
+

@@ -1,0 +1,24 @@
+<package>
+  <description brief="reefbot">
+
+     reefbot
+
+  </description>
+  <author>Mark Desnoyer</author>
+  <license>Restricted</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://www.reefbot.com</url>
+  <depend package="roscpp"/>
+  <depend package="rospy"/>
+  <depend package="sensor_msgs"/>
+  <depend package="std_msgs"/>
+  <depend package="joy"/>
+  <depend package="reefbot_msgs"/>
+  <depend package="cv_bridge"/>
+  <depend package="opencv2"/>
+  <depend package="reefbot_hudui"/>
+  <depend package="cascade_detector"/>
+
+</package>
+
+

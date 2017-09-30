@@ -1,0 +1,26 @@
+<package>
+  <description brief="species_id">
+
+     species_id
+
+  </description>
+  <author>Mark Desnoyer</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/species_id</url>
+  <depend package="roscpp"/>
+  <depend package="rospy"/>
+  <depend package="std_msgs"/>
+  <depend package="std_srvs"/>
+  <depend package="cv_bridge"/>
+  <!--<depend package="opencv2"/>-->
+  <depend package="sensor_msgs"/>
+  <depend package="reefbot_msgs"/>
+  <depend package="visual_utility"/>
+  <depend package="cv_blobs"/>
+  <depend package="objdetect_msgs"/>
+  <depend package="cv_utils"/>
+
+</package>
+
+
