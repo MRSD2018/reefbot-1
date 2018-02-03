@@ -6,7 +6,6 @@ import roslib; roslib.load_manifest('species_id')
 from pylab import *
 import numpy as np
 from optparse import OptionParser
-import Blob
 import csv
 import math
 import re
@@ -158,11 +157,10 @@ if __name__ == '__main__':
 
 
   (options, args) = parser.parse_args()
+ 
+ csvFile = args[-1]
 
-  csvFile = args[0]
-
-  
-  reader = csv.reader(open(csvFile, 'r'))
+ reader = csv.reader(open(csvFile, 'r'))
   colMap = CreateColMap(reader.next())
   imgList = ParseResults(reader, colMap)
 

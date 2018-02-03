@@ -4,7 +4,6 @@
 #include <limits>
 #include <math.h>
 #include <gsl/gsl_multimin.h>
-
 #include "cv_blobs/BlobResult-Inline.h"
 #include "cv_blobs/BlobFilters.h"
 #include "cv_utils/DisplayImages.h"
@@ -12,7 +11,6 @@
 using namespace cv;
 using namespace std;
 using namespace cv_blobs;
-
 namespace visual_utility {
 
 // -------- Useful functors for search through the mosaic --------

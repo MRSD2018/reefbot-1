@@ -1,10 +1,8 @@
 // GoIO_DeviceCheck.cpp : Defines the entry point for the console application.
-//
 
 #include <stdio.h>
 #include <string.h>
 #include <memory.h>
-
 #ifdef TARGET_OS_WIN
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 #include <windows.h>

@@ -14,7 +14,7 @@ from SpinTracker import SpinTracker
 from ButtonMapper import ButtonMapper
 
 EMPTY_JOY = Joy(axes=[0.0, 0.0, 0.0, 0.0, 0.0],
-                buttons=[0,0,0,0,0,0,0,0,0,0,0])
+                buttons=[1,2,3,4,5,6,7,8,9,10,11])
 
 def joystick_handler(data, video_ray_api, command_adapter, pub_signal,
                      thruster_limit, robot_status, thread_signal,

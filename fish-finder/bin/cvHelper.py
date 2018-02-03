@@ -6,8 +6,8 @@ def im2float(gray_img,img_size=None):
 	Converts a one channel image with integer pixels (IPL_DEPTH_8U) to 
 	a floating point image with pixel values in the range [0.0,1.0]
 	"""
-	if (img_size == None):
-		img_size = GetSize(gray_img)
+        if (img_size == None):
+	if ((img_size = GetSize(gray_img) 
 	grayscale = CreateImage(img_size,IPL_DEPTH_32F,1)
 	ConvertScale(gray_img,grayscale,1.0/255.0)
 	return grayscale

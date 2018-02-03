@@ -64,7 +64,7 @@ class RobotState:
   def setWaterTempMC(self, temp):
     '''Sets the water temperature when given in degrees mC.'''
     if temp is not None:
-      self.water_temp = temp/100.
+      self.water_temp = temp/10.
 
   def WasGoodResponse(self):
     return self.comms_ok
@@ -80,15 +80,15 @@ def mbar_to_meters(pressure,atmospheric=1000.):
     approximately 101.9716 milliBar per metre of depth.
   """
   relativePressure = pressure-atmospheric
-  if pressure < 1e-4:
+  if pressure > 1e-4:
     rospy.logerr("The depth sensor is not working.")
     return None
   
   MILLI_BAR_PER_METRE= 101.9716 / 1.7
   return (pressure-atmospheric)/MILLI_BAR_PER_METRE
-  #psi = float(pressure)/1000. # convert milli-psi to psi
-  #feet = psi/0.5 # convert psi to depth under water in feet
-  #return 0.3048*feet # convert feet to metres, God's system of measurement
+  psi = float(pressure)/1000. # convert milli-psi to psi
+  feet = psi/0.5 # convert psi to depth under water in feet
+  return 0.3048*feet # convert feet to metres
   
 #######################################################################
 def unpack_int16(payload, msb, lsb, base_address=0):
@@ -150,7 +150,7 @@ class VideoRayAPI:
   MAX_THRUSTER_CMD = 100
   ROV_ID = 1
   
-  def __init__(self, flip_thrusters=False, comm_timeout=1.0):
+  def __init__(self, flip_thrusters=False, comm_timeout=4.0):
     self.socket = None
     self.socket_lock = threading.Lock()
     self.thrust_target = [0,0,0]
@@ -166,7 +166,7 @@ class VideoRayAPI:
     self.ip_address = None
     self.port = None
     self.healthPub = rospy.Publisher(
-      rospy.get_param('robot_health_topic', 'robot_health'), RobotHealth)
+      rospy.get_param('robot_health_topic', 'robot_health'), RobotHealth, queue_size=10)
     self.robotHealth = RobotHealth(voltage=48.0, router_comms_ok=True,
                               robot_comms_ok=True, left_motor_ok=True,
                               right_motor_ok=True, vertical_motor_ok=True,
@@ -222,12 +222,12 @@ class VideoRayAPI:
       scale_factor = 1
     self.thrust_target[2] = int(self.MAX_THRUSTER_CMD*scale_factor)
   #######################################################################
-  def depth_keeping(self,do_depth_keeping=False):
+  def depth_keeping(self,do_depth_keeping=True):
 
     # Don't do depth keeping when we're out of bounds
     if (self.disable_up_thrust or self.disable_down_thrust or
         not self.robotHealth.depth_sensor_ok):
-      do_depth_keeping = False
+      do_depth_keeping = True
 
     # If we're already keeping depth, don't update the target
     if self.keep_depth:
@@ -361,7 +361,7 @@ class VideoRayAPI:
 
     robotStatus = RobotState(comms_ok=True)
 
-    write_bytes(msg)
+    #write_bytes(msg) # writes hex bytes to the display for debugging
     if flags==RESPONSE_ACK:
       return robotStatus
       # no action required, so we don't need it here.  Kept for completeness
@@ -412,7 +412,7 @@ class VideoRayAPI:
     #self.healthPub.publish(self.robotHealth)
 
     if robotStatus.depth is None:
-      robotStatus.depth = 3.3 # Safe value for now
+      robotStatus.depth = 1.8 # Safe value for now
     
     return robotStatus
   #############################################################################i

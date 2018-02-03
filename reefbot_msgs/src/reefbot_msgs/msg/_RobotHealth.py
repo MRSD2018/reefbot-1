@@ -13,32 +13,24 @@ class RobotHealth(genpy.Message):
 #
 # Author: Mark Desnoyer (markd@cmu.edu)
 # Date: July 2010
-
 # Voltage going to the robot in Volts. Note, as of initial deployment,
 # this will probably be either 48V or 0V because we don't actually
 # have a volt meter.
 float32 voltage
-
 # Do we have a comms link to the router
 bool router_comms_ok
-
 # Do we have a comms link to the robot
 bool robot_comms_ok
-
 # Are the various motors operational
 bool left_motor_ok
 bool right_motor_ok
 bool vertical_motor_ok
-
 # Are we getting valid readings from the depth sensor
 bool depth_sensor_ok
-
 # Are we getting valid readings from the heading sensor
 bool heading_sensor_ok
-
 # Error code reported by the robot
 int32 robot_error_code
-
 """
   __slots__ = ['voltage','router_comms_ok','robot_comms_ok','left_motor_ok','right_motor_ok','vertical_motor_ok','depth_sensor_ok','heading_sensor_ok','robot_error_code']
   _slot_types = ['float32','bool','bool','bool','bool','bool','bool','bool','int32']
@@ -49,10 +41,8 @@ int32 robot_error_code
     set to None will be assigned a default value. The recommend
     use is keyword arguments as this is more robust to future message
     changes.  You cannot mix in-order arguments and keyword arguments.
-
     The available fields are:
        voltage,router_comms_ok,robot_comms_ok,left_motor_ok,right_motor_ok,vertical_motor_ok,depth_sensor_ok,heading_sensor_ok,robot_error_code
-
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
     to set specific fields.
@@ -166,3 +156,53 @@ int32 robot_error_code
 
 _struct_I = genpy.struct_I
 _struct_f7Bi = struct.Struct("<f7Bi")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
