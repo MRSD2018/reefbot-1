@@ -6,6 +6,7 @@
 import roslib; roslib.load_manifest('reefbot-controller')
 import rospy
 from reefbot_msgs.msg import RobotHealth
+from reefbot_msgs.msg import RobotStatus
 import struct,operator,socket,threading
 import sys
 
@@ -172,6 +173,14 @@ class VideoRayAPI:
                               right_motor_ok=True, vertical_motor_ok=True,
                               depth_sensor_ok=True, heading_sensor_ok=True,
                               robot_error_code=0)
+    self.statusPub = rospy.Publisher(
+      rospy.get_param('robot_status_topic', 'robot_status'), RobotStatus, queue_size=10)
+    self.robotStatus = RobotStatus(left_speed=0, right_speed=0, vertical_speed=0,
+                              depth = 0,
+                              heading = 0, roll = 0, pitch = 0,
+                              internal_humidity = 0, water_temp=0, 
+                              spin_count = 0,
+                              internal_temp=0, total_power=0, voltage_drop=0, tether_voltage =0, bus_voltage=0, bus_current=0, comm_error_count=0)
     self.timeout=comm_timeout
 
   #######################################################################
@@ -329,7 +338,7 @@ class VideoRayAPI:
                        "Trying to reestablish connection")
           self.robotHealth.robot_comms_ok = False
 	  # mdesnoyer: Not a useful message
-          #self.healthPub.publish(self.robotHealth)
+          # self.healthPub.publish(self.robotHealth)
           self.connect(self.ip_address, self.port)
     except Exception as e:
       rospy.logerr("unexpected error: " + str(e))
@@ -360,6 +369,7 @@ class VideoRayAPI:
     payload = msg[8:]
 
     robotStatus = RobotState(comms_ok=True)
+    robot_status_msg = RobotStatus
 
     #write_bytes(msg) # writes hex bytes to the display for debugging
     if flags==RESPONSE_ACK:
@@ -371,6 +381,7 @@ class VideoRayAPI:
       robotStatus.heading = unpack_int16(payload, 0x68, 0x69, address)
       robotStatus.pitch = unpack_int16(payload, 0x6A, 0x6B, address)
       robotStatus.roll = unpack_int16(payload, 0x6C, 0x6D, address)
+      print "Heading:  ", robotStatus.heading, "  Pitch:  ", robotStatus.pitch, "  Roll:  ", robotStatus.roll
       robotStatus.setWaterTempMC(unpack_int16(payload, 0x7A, 0x7B, address))
       robotStatus.internal_humidity = unpack_int16(payload, 0x84, 0x85,
                                                    address)
@@ -409,10 +420,33 @@ class VideoRayAPI:
     # Publish the health of the robot
     self.robotHealth.depth_sensor_ok = robotStatus.depth is not None
     # Not a useful message
-    #self.healthPub.publish(self.robotHealth)
+    # self.healthPub.publish(self.robotHealth)
 
     if robotStatus.depth is None:
       robotStatus.depth = 1.8 # Safe value for now
+
+    #Publish Robot Status
+    # robot_status_msg.left_speed = robotStatus.left_speed
+    # robot_status_msg.right_speed = self.right_speed
+    # robot_status_msg.vertical_speed = self.vertical_speed
+
+
+    robot_status_msg.heading = robotStatus.heading
+    robot_status_msg.pitch = robotStatus.pitch
+    robot_status_msg.roll  = robotStatus.roll
+    robot_status_msg.internal_humidity = robotStatus.internal_humidity
+    robot_status_msg.water_temp = robotStatus.water_temp
+    robot_status_msg.internal_temp = robotStatus.internal_temp
+    robot_status_msg.total_power = robotStatus.total_power
+    robot_status_msg.voltage_drop = robotStatus.voltage_drop
+    robot_status_msg.tether_voltage = robotStatus.tether_voltage
+    robot_status_msg.bus_voltage = robotStatus.bus_voltage
+    robot_status_msg.bus_current = robotStatus.bus_current
+    robot_status_msg.comm_error_count = robotStatus.comm_error_count
+    robot_status_msg.depth = robotStatus.depth
+    self.statusPub.publish(self.robotStatus)
+
+    
     
     return robotStatus
   #############################################################################i
