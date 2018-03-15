@@ -64,6 +64,7 @@ def joy_callback(data):
                 lights_max_cmd = data.axes[5] * -1 * lights_max
 
 def listener(args):
+        rospy.init_node('joy_listen')
 	print "Starting Controller\n"	    
 	# Connect to reefbot robot  
 	v = VideoRayAPI()
@@ -73,14 +74,13 @@ def listener(args):
 	v.toggle_camera(True)
 	v.send_command()	
 
-        rospy.init_node('joy_listen')
 	rospy.Subscriber("joy",Joy,joy_callback, queue_size=1)
 
         rate = rospy.Rate(5) # in Hz
 	while not rospy.is_shutdown():
 		v.set_velocity(left_motor_cmd,right_motor_cmd)
 		v.set_vertical(vertical_motor_cmd)
-        	#v.set_lights(lights_max_cmd)
+        	v.set_lights(lights_max_cmd)
         	v.send_command()
 		print "Sending Commands Left:", left_motor_cmd, " Right:", right_motor_cmd, "Vertical:", vertical_motor_cmd, "Lights:", lights_max_cmd, ".\n"
 		rate.sleep()
