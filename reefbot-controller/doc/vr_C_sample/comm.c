@@ -21,7 +21,12 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <termios.h>
+#include <termios.h>    
+
+
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/select.h> 
 
 int  comm_open(const char *port, int baudrate) {
     struct termios tio;

@@ -9,6 +9,7 @@ from reefbot_msgs.msg import RobotHealth
 from reefbot_msgs.msg import RobotStatus
 import struct,operator,socket,threading
 import sys
+import time
 
 #  These values are taken from the file pro4_specific_response.h
 #  as given to me (PMF) from Andy Goldstein
@@ -158,7 +159,7 @@ class VideoRayAPI:
     self.lights = 0
     self.last_depth = '\xFF\xFF'
     self.depth_bytes = '\xFF\xFF'
-    self.keep_depth = False 
+    self.keep_depth = True 
     self.activate_camera = False
     self.flip_thrusters = flip_thrusters
     self.disable_up_thrust = False
@@ -426,9 +427,9 @@ class VideoRayAPI:
       robotStatus.depth = 1.8 # Safe value for now
 
     #Publish Robot Status
-    # robot_status_msg.left_speed = robotStatus.left_speed
-    # robot_status_msg.right_speed = self.right_speed
-    # robot_status_msg.vertical_speed = self.vertical_speed
+    robot_status_msg.left_speed = -self.thrust_target[0]
+    robot_status_msg.right_speed = -self.thrust_target[1]
+    robot_status_msg.vertical_speed = abs(self.thrust_target[2])
 
 
     robot_status_msg.heading = robotStatus.heading
