@@ -58,10 +58,14 @@ def joy_callback(data):
 	
 	
 	# Light control
-        if (data.axes[2] >-0.7):
-                lights_max_cmd = data.axes[2] * lights_max
-        if (data.axes[5] < 0.7):
-                lights_max_cmd = data.axes[5] * -1 * lights_max
+        if data.axes[2] < -0.8:
+            lights_max_cmd = data.axes[5] * -1 * lights_max
+            print lights_max_cmd
+	
+        # if (data.axes[2] >-0.7):
+        #         lights_max_cmd = data.axes[2] * lights_max
+        # if (data.axes[5] < 0.7):
+        #         lights_max_cmd = data.axes[5] * -1 * lights_max
 
 def listener(args):
         rospy.init_node('joy_listen')
