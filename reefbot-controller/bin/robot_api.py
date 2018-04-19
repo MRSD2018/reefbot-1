@@ -400,17 +400,17 @@ class VideoRayAPI:
                                                   address)
       
       robotStatus.depth = unpack_int16(payload, 0x66, 0x67, address)
-      if robotStatus.depth is not None:
-        self.last_depth = payload[0x66-address]+payload[0x67-address]
-      robotStatus.depth = mbar_to_meters(robotStatus.depth)
+      # if robotStatus.depth is not None:
+      #   self.last_depth = payload[0x66-address]+payload[0x67-address]
+      # robotStatus.depth = mbar_to_meters(robotStatus.depth)
       
     
     if flags==RESPONSE_ATTITUDE or flags==RESPONSE_WATER_TEMP or flags==RESPONSE_HEALTH:
       robotStatus.heading = unpack_int16(payload, 0, 1)
       robotStatus.pitch = unpack_int16(payload, 2, 3)
       robotStatus.roll = unpack_int16(payload, 4, 5)
-      self.last_depth = payload[6]+payload[7]
-      robotStatus.depth = mbar_to_meters(unpack_int16(payload, 6, 7))
+      # self.last_depth = payload[6]+payload[7]
+      # robotStatus.depth = mbar_to_meters(unpack_int16(payload, 6, 7))
 
     if flags==RESPONSE_WATER_TEMP or flags==RESPONSE_HEALTH:
       robotStatus.setWaterTempMC(unpack_int16(payload, 8, 9))
@@ -423,8 +423,8 @@ class VideoRayAPI:
     # Not a useful message
     # self.healthPub.publish(self.robotHealth)
 
-    if robotStatus.depth is None:
-      robotStatus.depth = 1.8 # Safe value for now
+    # if robotStatus.depth is None:
+    #   robotStatus.depth = 1.8 # Safe value for now
 
     #Publish Robot Status
     robot_status_msg.left_speed = -self.thrust_target[0]
@@ -444,7 +444,7 @@ class VideoRayAPI:
     robot_status_msg.bus_voltage = robotStatus.bus_voltage
     robot_status_msg.bus_current = robotStatus.bus_current
     robot_status_msg.comm_error_count = robotStatus.comm_error_count
-    robot_status_msg.depth = robotStatus.depth
+    robot_status_msg.depth = unpack_int16(payload, 0x66, 0x67, address)
     self.statusPub.publish(self.robotStatus)
 
     

@@ -42,14 +42,14 @@ def joy_callback(data):
     # Set right and left thruster command  
     # Set to use just one joystick. So other joystick can control vertical
     if (data.axes[1] > 0.1): # filter out really small values
-            left_motor_cmd = int(data.axes[1] * left_motor_max * -.7)
+            left_motor_cmd = int(data.axes[1] * left_motor_max * -.3)
     if (data.axes[1] < -0.1):
-            left_motor_cmd = int(abs(data.axes[1]) * left_motor_max *.7)
+            left_motor_cmd = int(abs(data.axes[1]) * left_motor_max *.3)
     
     if (data.axes[4] > 0.1): # filter out really small values
-        right_motor_cmd = int(data.axes[4] * right_motor_max * -.7)
+        right_motor_cmd = int(data.axes[4] * right_motor_max * -.3)
     if (data.axes[4] < -0.1):
-        right_motor_cmd = int(abs(data.axes[4]) * right_motor_max * .7)
+        right_motor_cmd = int(abs(data.axes[4]) * right_motor_max * .3)
 
 
     # now set the vertical control thruster
@@ -58,13 +58,13 @@ def joy_callback(data):
     if (data.axes[7] < -0.8):
         vertical_motor_cmd = -1 *vertical_motor_max
     
-    if data.buttons[5] > 0.5:
-        left_motor_cmd = int(left_motor_max * -1) * 0.75
-        right_motor_cmd = int(right_motor_max * -1) * 0.75
+    if data.buttons[5] > .2:
+        left_motor_cmd = int(left_motor_max * -1) * .2
+        right_motor_cmd = int(right_motor_max * -1) * .2
 
-    if data.buttons[4] > 0.5:
-        left_motor_cmd = int(left_motor_max) * 0.75
-        right_motor_cmd = int(right_motor_max) * 0.75
+    if data.buttons[4] > .2:
+        left_motor_cmd = int(left_motor_max) * .2
+        right_motor_cmd = int(right_motor_max) * .2
 
     if data.buttons[1] > 0.5:
         left_motor_cmd = 0
@@ -79,7 +79,7 @@ def joy_callback(data):
 
     # Light control
     if data.axes[2] < -0.8:
-        lights_max_cmd = data.axes[5] * -1 * lights_max
+        lights_max_cmd = data.axes[5] * -.1*lights_max
         print lights_max_cmd
     
         # if (data.axes[2] >-0.7):
