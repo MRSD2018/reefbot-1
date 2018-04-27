@@ -7,11 +7,6 @@ from geometry_msgs.msg import Point
 from reefbot_msgs.msg import RobotStatus
 import time
 import math
-# ROS Node converts Joystick inputs from the joy node
-# Gets joystick messages to the Joy topic
-# then converts the joystick inputs into Twist commands
-# axes 1: left stick vertical controls linear speed
-# axes 0: left stick horizontal controls angular speed
 from robot_api import *
 
 # set the *_max values below to control max values
@@ -46,9 +41,12 @@ autonomous_mode = False
 global left_motor_cmd, right_motor_cmd, vertical_motor_cmd, lights_max_cmd
 global last_ball_msg, last_robot_msg
 
+ball_msg_timeout = 1.0 # s
+global ball_msg_received_time
 
 def store_ball_info(data): # callback for ball detection
     last_ball_msg = data
+    ball_msg_received_time = time.time()
     set_setpoints()
 
 
@@ -87,6 +85,12 @@ def store_robot_info(data):
     last_robot_msg = data
 
 
+def stay_still():
+    left_motor_cmd = 0
+    right_motor_cmd = 0    
+    vertical_motor_cmd = 0
+
+    
 def move_to_ball():
     left_motor_cmd = 0
     right_motor_cmd = 0
@@ -168,9 +172,16 @@ def joy_callback(data):
         if data.axes[2] < -0.8:
             lights_max_cmd = data.axes[5] * -.1*lights_max
             print lights_max_cmd
+
+
+def within_timeout_period():
+    if time.time()-ball_msg_received_time <ball_msg_timeout:
+        return True
+    else:
+        return False
     
 def listener(args):
-    rospy.init_node('follow_tags')
+    rospy.init_node('follow_ball')
     print "Starting Controller\n"
     # Connect to reefbot robot
     v = VideoRayAPI()
@@ -188,7 +199,12 @@ def listener(args):
     while not rospy.is_shutdown():
         if autonomous_mode:
             print('In autonomous mode')
-            move_to_ball() # this calculates the motor commands which will be sent in the following lines
+            if within_timeout_period(): # if you've received a recent ball detection message
+                print("Spotted a ball!")
+                move_to_ball() # this calculates the motor commands which will be sent in the following lines
+            else:
+                print("Where's that ball?")
+                stay_still()
         v.set_velocity(left_motor_cmd, right_motor_cmd)
         v.set_vertical(vertical_motor_cmd)
         v.set_lights(lights_max_cmd)
