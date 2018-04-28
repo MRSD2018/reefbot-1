@@ -28,7 +28,7 @@ right_motor_cmd = 0
 vertical_motor_cmd = 0
 lights_max_cmd = 0
 
-last_ball_msg = Point()
+detection_data = Point()
 
 # heading_setpoint = 0
 # vert_setpoint = 0
@@ -46,14 +46,17 @@ autonomous_mode = False
 global ball_msg_received_time
 
 class Controller:
-    def __init__(self):
+    def __init__(self, max_motor_cmds):
+        self.max_motor_cmds = {'left': max_motor_cmds['left'],  \
+                               'right': max_motor_cmds['right'],  \
+                               'vert': max_motor_cmds['vert']}
         self.motor_cmds =   {'left': 0.0,   'right': 0.0,   'vert': 0.0}
         self.ball =         {'cx': 0.0,     'cy': 0.0,      'dist': 0.0} # ball position and size in frame
         self.gains =        {'fwd': 1.0,    'yaw': 1.0,     'vert': 1.0}
         self.errors =       {'fwd': 0.0,    'yaw': 0.0,     'vert': 0.0}
         self.desired_separation_distance = 1.0 # m
 
-        self.setpoints = {'fwd': desired_separation_distance, 'yaw': 0.0, 'vert' = 0.0}
+        # self.setpoints = {'fwd': desired_separation_distance, 'yaw': 0.0, 'vert' = 0.0}
         self.horiz_pixels = 540.0
         self.vert_pixels = 410.0
 
@@ -63,7 +66,7 @@ class Controller:
     def process_detection_data(self, detection_msg):
         self.ball['cx'], self.ball['cy'] = self.normalize_pixels(detection_msg.x, detection_msg.y)
         self.ball['dist'] = self.get_ball_distance(detection_msg.z)
-        self.set_setpoints()
+        # self.set_setpoints()
 
 
     def get_ball_distance(self, radius):
@@ -76,21 +79,23 @@ class Controller:
         return x_norm, y_norm
 
 
-    def set_setpoints(self):
-        self.setpoints['vert'] = self.ball['cy']         # positive error means target is up
-        self.setpoints['fwd'] = self.ball['dist'] - self.desired_separation_distance
-        angle_error = math.atan2(self.ball['cx'], self.ball['dist']) # positive error means target is to the right
-        self.setpoints['yaw'] = angle_error + robot_heading
-
-
     def stay_still():
         self.motor_cmds = self.motor_cmds.fromkeys(self.motor_cmds, 0.0) # reset all to 0
 
+    def update(self, data):
+        if data.x < 0 or data.y < 0 or data.z < 0: # corresponds to no detection 
+            self.ball['cx']     =   0.0
+            self.ball['cy']     =   0.0
+            self.ball['dist']   =   self.desired_separation_distance
+        else: 
+            self.ball['cx']     =   data.x
+            self.ball['cy']     =   data.y
+            self.ball['dist']   =   data.z      
 
     def move(self, current_heading):
         # get errors
-        self.errors['fwd']  =   self.ball['dist'] - self.setpoints['fwd']
-        self.errors['yaw']  =   current_heading - self.setpoints['yaw']
+        self.errors['fwd']  =   self.ball['dist'] - self.desired_separation_distance
+        self.errors['yaw']  =   math.atan2(self.ball['cx'], self.ball['dist'])
         self.errors['vert'] =   self.ball['cy']
 
         # set motor commands
@@ -98,7 +103,7 @@ class Controller:
         self.motor_cmds['left'] = self.gains['fwd'] * self.errors['fwd'] + self.gains['yaw'] * self.errors['yaw']
         self.motor_cmds['right'] = self.gains['fwd'] * self.errors['fwd'] - self.gains['yaw'] * self.errors['yaw']
 
-        # get it normalized
+        # check against max
         if left_motor_cmd > left_motor_max or right_motor_cmd > right_motor_max:
             mult_factor = left_motor_max / max(left_motor_cmd, right_motor_cmd)
             left_motor_cmd *= mult_factor
@@ -106,11 +111,8 @@ class Controller:
 
 
 
-def store_ball_info(self, data): # callback for ball detection
-    last_ball_msg = data
-    # print last_ball_msg
-    ball_msg_received_time = time.time()
-    set_setpoints(last_ball_msg)
+def process_ball_detection_msg(data): # callback for ball detection
+    detection_data = data
 
 
 def joy_callback(data):
@@ -165,12 +167,12 @@ def listener(args):
     v.toggle_camera(True)
     v.send_command()
 
-    rospy.Subscriber("ball_detection", Point, store_ball_info, queue_size=1)
+    rospy.Subscriber("ball_detection", Point, process_ball_detection_msg, queue_size=1)
     rospy.Subscriber("joy", Joy, joy_callback, queue_size=1)
 
     max_motor_cmds = {'left': 2.0, 'right': 2.0, 'vert': 3.5}
 
-    c = Controller()
+    c = Controller(max_motor_cmds)
 
     rate = rospy.Rate(5)  # in Hz
     while not rospy.is_shutdown():
@@ -178,6 +180,7 @@ def listener(args):
             # print('In autonomous mode')
         #     if within_timeout_period(): # if you've received a recent ball detection message
         #         print("Spotted a ball!")
+            c.update(detection_data)
             c.move(v.robotStatus.heading) # this calculates the motor commands which will be sent in the following lines
             left_motor_cmd, right_motor_cmd, vertical_motor_cmd = c.get_motor_cmds()
         #     else:
