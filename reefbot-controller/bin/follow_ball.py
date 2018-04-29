@@ -10,6 +10,7 @@ import time
 import math
 from robot_api import *
 import numpy as np
+from collections import deque
 
 # set the *_max values below to control max values
 # currenty left and right are scaled.
@@ -39,13 +40,15 @@ class Controller:
         self.motor_cmds =   {'left': 0.0,   'right': 0.0,   'vert': 0.0}
         self.ball =         {'cx': 0.0,     'cy': 0.0,      'dist': 0.0} # ball position and size in frame
         self.update =       {'cx': 0.0,     'cy': 0.0,      'dist': 0.0} # ball position and size in frame
-        self.gains =        {'fwd': 0.2,    'yaw': 0.5,     'vert': 1.0}
+        self.kP =        {'fwd': 0.2,    'yaw': 0.5,     'vert': 1.0}
+        # self.kD =        {'fwd': 0.2,    'yaw': 0.5,     'vert': 1.0}
         self.errors =       {'fwd': 0.0,    'yaw': 0.0,     'vert': 0.0}
+        # self.delta_errors =       {'fwd': 0.0,    'yaw': 0.0,     'vert': 0.0}
         self.desired_separation_distance = 1.0 # m
         self.horiz_pixels = 540.0
         self.vert_pixels = 410.0
         self.gamma = 0.8
-        # self.ball_av = {'cx': np.zeros(1),     'cy': np.zeros(1),      'dist': np.zeros(1)}
+        # self.ball_hist = {'cx': deque([]),     'cy': deque([]),      'dist': deque([]), 'time': deque([])}
         # self.num_hist_elms = 5
 
     def get_motor_cmds(self):
@@ -82,6 +85,15 @@ class Controller:
         self.ball['cy']                      = (1.0 - self.gamma) * self.ball['cy'] + self.gamma * self.update['cy']
         self.ball['dist']                    = (1.0 - self.gamma) * self.ball['dist'] + self.gamma * self.update['dist']
  
+        # if len(self.ball_hist['cx']) > self.num_hist_elms:
+        #     self.ball_hist['cx'].popleft()
+        #     self.ball_hist['cy'].popleft()
+        #     self.ball_hist['dist'].popleft()
+        #     self.ball_hist['time'].popleft()
+        # self.ball_hist['cx'].append(self.ball['cx'])
+        # self.ball_hist['cy'].append(self.ball['cy'])
+        # self.ball_hist['dist'].append(self.ball['dist'])
+        # self.ball_hist['time'].append(time.time())
 
     def move(self, data, current_heading):
         self.update_states(data)
@@ -94,10 +106,14 @@ class Controller:
         self.errors['vert'] =   self.ball['cy']
         # self.errors['vert'] =   0
 
+        # for i in range(len(self.ball_hist['cx']))
+        # self.delta_errors['fwd'] = 
+
+
         # set motor commands
-        self.motor_cmds['vert']     = -(self.gains['vert'] * self.errors['vert'])
-        self.motor_cmds['left']     = -(0.85 * self.gains['fwd'] * self.errors['fwd'] + self.gains['yaw'] * self.errors['yaw'])
-        self.motor_cmds['right']    = -(self.gains['fwd'] * self.errors['fwd'] - self.gains['yaw'] * self.errors['yaw'])
+        self.motor_cmds['vert']     = -(self.kP['vert'] * self.errors['vert'])
+        self.motor_cmds['left']     = -(0.85 * self.kP['fwd'] * self.errors['fwd'] + self.kP['yaw'] * self.errors['yaw'])
+        self.motor_cmds['right']    = -(self.kP['fwd'] * self.errors['fwd'] - self.kP['yaw'] * self.errors['yaw'])
 
         # check against max
         # self.motor_cmds['vert']     = min(self.max_motor_cmds['vert'], self.motor_cmds['vert'])# * np.sign(self.motor_cmds['vert'])
@@ -119,17 +135,9 @@ def joy_callback(data):
         # print('Autonomous mode commanded')
         global autonomous_mode
         autonomous_mode = True
-        lights_max_cmd = max_cmds['lights'] * 0.5
 
     else:    
         autonomous_mode = False
-        lights_max_cmd = max_cmds['lights'] * 0.5
-        # print('Received joystick message') 
-        
-        # left_motor_cmd = 0 
-        # right_motor_cmd = 0 
-        # vertical_motor_cmd = 0
-        # lights_max_cmd = 0
 
         # map joystick inputs
         left_motor_input = -data.axes[1] # continuous in range of [-1, 1]
@@ -169,6 +177,7 @@ def listener(args):
 
     rate = rospy.Rate(5)  # in Hz
     while not rospy.is_shutdown():
+        lights_max_cmd = max_cmds['lights'] * 0.5
         if autonomous_mode:
             if c.ball_visible(detection_data):
                 c.move(detection_data, v.robotStatus.heading) # this calculates the motor commands which will be sent in the following lines
