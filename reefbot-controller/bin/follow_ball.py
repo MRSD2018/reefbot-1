@@ -39,7 +39,7 @@ class Controller:
         self.motor_cmds =   {'left': 0.0,   'right': 0.0,   'vert': 0.0}
         self.ball =         {'cx': 0.0,     'cy': 0.0,      'dist': 0.0} # ball position and size in frame
         self.update =       {'cx': 0.0,     'cy': 0.0,      'dist': 0.0} # ball position and size in frame
-        self.gains =        {'fwd': 1.0,    'yaw': 1.0,     'vert': 1.0}
+        self.gains =        {'fwd': 0.2,    'yaw': 0.5,     'vert': 1.0}
         self.errors =       {'fwd': 0.0,    'yaw': 0.0,     'vert': 0.0}
         self.desired_separation_distance = 1.0 # m
         self.horiz_pixels = 540.0
@@ -87,14 +87,17 @@ class Controller:
         self.update_states(data)
 
         # get errors
+        # self.errors['fwd']  =   0
         self.errors['fwd']  =   self.ball['dist'] - self.desired_separation_distance
+        # self.errors['yaw']  =   0
         self.errors['yaw']  =   math.atan2(self.ball['cx'], self.ball['dist'])
         self.errors['vert'] =   self.ball['cy']
+        # self.errors['vert'] =   0
 
         # set motor commands
-        self.motor_cmds['vert']     = self.gains['vert'] * self.errors['vert']
-        self.motor_cmds['left']     = self.gains['fwd'] * self.errors['fwd'] + self.gains['yaw'] * self.errors['yaw']
-        self.motor_cmds['right']    = self.gains['fwd'] * self.errors['fwd'] - self.gains['yaw'] * self.errors['yaw']
+        self.motor_cmds['vert']     = -(self.gains['vert'] * self.errors['vert'])
+        self.motor_cmds['left']     = -(0.85 * self.gains['fwd'] * self.errors['fwd'] + self.gains['yaw'] * self.errors['yaw'])
+        self.motor_cmds['right']    = -(self.gains['fwd'] * self.errors['fwd'] - self.gains['yaw'] * self.errors['yaw'])
 
         # check against max
         # self.motor_cmds['vert']     = min(self.max_motor_cmds['vert'], self.motor_cmds['vert'])# * np.sign(self.motor_cmds['vert'])
@@ -120,6 +123,7 @@ def joy_callback(data):
 
     else:    
         autonomous_mode = False
+        lights_max_cmd = max_cmds['lights'] * 0.5
         # print('Received joystick message') 
         
         # left_motor_cmd = 0 
@@ -173,9 +177,10 @@ def listener(args):
             left_motor_cmd, right_motor_cmd, vertical_motor_cmd = c.get_motor_cmds()
             # print c.ball
         # left_motor_cmd = 0
+        # right_motor_cmd = 0
         v.set_velocity(left_motor_cmd, right_motor_cmd)
         v.set_vertical(vertical_motor_cmd)
-        # v.set_lights(lights_max_cmd)
+        v.set_lights(lights_max_cmd)
         v.send_command()
         print "Autonomous: ", autonomous_mode
         print "Sending Commands Left:", left_motor_cmd, " Right:", right_motor_cmd, "Vertical:", vertical_motor_cmd, "Lights:", lights_max_cmd, ".\n"
